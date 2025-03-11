@@ -53,12 +53,12 @@ case $settings in
 esac
 
 ### === Output paths ===
-output_dir="ANTs_outputs"
-mkdir -p ${output_dir}
+ANTs_outputs="ANTs_outputs"
+mkdir -p ${ANTs_outputs}
 
 ### === Perform ANTs registration ===
 echo "Running ANTs registration..."
-ANTsprefix=${output_dir}/reg_
+ANTsprefix=${ANTs_outputs}/reg_
 ANTsdiff=${ANTsprefix}"diff.nii.gz"
 ANTsinv=${ANTsprefix}"inv.nii.gz"
 singularity exec -e docker://brainlife/ants:2.2.0-1bc antsRegistration -d 3 \
@@ -99,7 +99,8 @@ ConvertTransformFile 3 $AffineMat  ${transformations}'/affine.txt'
  
 ### === Apply the transformation to FOD using warpinit+antsApplyTransforms+warpcorrect+mrtransform ===
 
-outputdir=transformed
+outputdir=${SCRIPT_DIR}'/transformed'
+mkdir -p ${outputdir}
 fod_output=${outputdir}'/'$( basename ${fod} )
 bash ${applyWarp2FOD} ${fod} ${fa_fixed}  ${AffineMat}  ${WarpField} ${fod_output}
 
