@@ -79,8 +79,8 @@ affine.txt
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/gamorosino/app-apply-ants-transform.git
-cd app-apply-ants-transform
+git clone https://github.com/gamorosino/app-align-FOD.git
+cd app-align-FOD
 ```
 
 ### 2. Prepare your configuration
