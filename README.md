@@ -28,7 +28,7 @@ All parameters are provided via a `config.json` file.
     "lmax": 8,
     "fa": "input/fa.nii.gz",
     "fa_fixed": "template/fa_template.nii.gz",
-    "lmax8": "input/fod_lmax8.mif",
+    "lmax8": "input/lmax8.mif",
     "settings": "3"
 }
 ```
