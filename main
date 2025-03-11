@@ -1,0 +1,105 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=1,vmem=8g,walltime=0:10:00
+#PBS -N app-apply-transform
+#PBS -V
+
+
+set -e
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/"
+applyWarp2FOD=${SCRIPT_DIR}./applyWarp2FOD.sh
+
+
+### === Load parameters from config.json ===
+lmax=$(jq -r .lmax config.json)
+fod=$(jq -r '.lmax'"${lmax}" config.json)
+fa_moving=$(jq -r .fa config.json)
+fa_fixed=$(jq -r .fa_fixed config.json)
+settings=$(jq -r .settings config.json)
+
+### === Set ANTs registration parameters ===
+case $settings in
+  "1")
+    echo "Using one-level registration"
+    its="10000x0x0"
+    syn="100x0x0,0,5"
+    sigma="1x0.5x0vox"
+    shrink="4x2x1"
+    ;;
+  "2")
+    echo "Using two-level registration"
+    its="10000x10000x0"
+    syn="100x100x0,-0.01,5"
+    sigma="1x0.5x0vox"
+    shrink="4x2x1"
+    ;;
+  "3")
+    echo "Using three-level registration"
+    its="10000x111110x11110"
+    syn="100x100x30,-0.01,5"
+    sigma="1x0.5x0vox"
+    shrink="4x2x1"
+    ;;
+  "4")
+    echo "Using four-level registration"
+    its="10000x10000x10000"
+    syn="100x80x50x20,-0.01,10"
+    sigma="2x1x0.5x0vox"
+    shrink="8x4x2x1"
+    ;;
+  *)
+    echo "Invalid registration setting"
+    exit 1
+    ;;
+esac
+
+### === Output paths ===
+output_dir="ANTs_outputs"
+mkdir -p ${output_dir}
+
+### === Perform ANTs registration ===
+echo "Running ANTs registration..."
+ANTsprefix=${output_dir}/reg_
+ANTsdiff=${ANTsprefix}"diff.nii.gz"
+ANTsinv=${ANTsprefix}"inv.nii.gz"
+singularity exec -e docker://brainlife/ants:2.2.0-1bc antsRegistration -d 3 \
+  -r [${fa_fixed},${fa_moving},1] \
+  -m mattes[${fa_fixed},${fa_moving},1,32,regular,0.25] \
+  -t affine[0.1] \
+  -c [${its},1e-6,10] \
+  -s ${sigma} \
+  -f ${shrink} \
+  -m cc[${fa_fixed},${fa_moving},1,4] \
+  -t SyN[0.2,3,0] \
+  -c [${its},1e-6,10] \
+  -s ${sigma} \
+  -f ${shrink} \
+  -o [${ANTsprefix},${ANTsdiff},${ANTsinv}]
+
+  WarpField=${ANTsprefix}"1Warp.nii.gz"
+  InverseWarpField=${ANTsprefix}"1InverseWarp.nii.gz"
+  AffineMat=${ANTsprefix}"0GenericAffine.mat"
+  fa_warped=${ANTsprefix}"warped.nii.gz"
+  
+	singularity exec -e docker://brainlife/ants:2.2.0-1bc \
+    antsApplyTransforms -d 3 \
+                        -i ${fa_moving} 
+                        -r ${fa_fixed} \
+                        -t  ${WarpField} \
+                        -t  ${AffineMat} \
+								        -o ${fa_warped}
+                
+transformations=${SCRIPT_DIR}'/transformations/'
+mkdir -p ${transformations}
+
+### === format output in brainlife datatype style ===
+
+cp $WarpField ${transformations}'/warp.nii.gz'
+cp $InverseWarpField ${transformations}'/inverse-warp.nii.gz'
+ConvertTransformFile 3 $AffineMat  ${transformations}'/affine.txt'
+ 
+### === Apply the transformation to FOD using warpinit+antsApplyTransforms+warpcorrect+mrtransform ===
+
+outputdir=transformed
+fod_output=${outputdir}'/'$( basename ${fod} )
+bash ${applyWarp2FOD} ${fod} ${fa_fixed}  ${AffineMat}  ${WarpField} ${fod_output}
+
