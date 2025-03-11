@@ -102,5 +102,6 @@ ConvertTransformFile 3 $AffineMat  ${transformations}'/affine.txt'
 outputdir=${SCRIPT_DIR}'/transformed'
 mkdir -p ${outputdir}
 fod_output=${outputdir}'/'$( basename ${fod} )
-bash ${applyWarp2FOD} ${fod} ${fa_fixed}  ${AffineMat}  ${WarpField} ${fod_output}
+singularity exec -e docker://brainlife/brainlife/mrtrix3:3.0.3 \
+ bash ${applyWarp2FOD} ${fod} ${fa_fixed}  ${AffineMat}  ${WarpField} ${fod_output}
 
