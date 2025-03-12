@@ -37,7 +37,7 @@ All parameters are provided via a `config.json` file.
 
 | Field       | Description                                                  |
 |-------------|--------------------------------------------------------------|
-| `lmax`      | Spherical harmonic order of FOD                              |
+| `lmax`      | Spherical harmonic order of FOD (e.g., `8`)                             |
 | `lmax<lmax>`     | FOD image for the selected `lmax` (e.g., `lmax8`)            |
 | `fa`        | FA image to register (moving image)                          |
 | `fa_fixed`  | Template FA image (fixed image)                              |
