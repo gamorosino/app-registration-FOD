@@ -40,7 +40,7 @@ All parameters are provided via a `config.json` file.
 | `lmax`      | Spherical harmonic order of FOD (e.g., `8`)                             |
 | `lmax<lmax>`     | FOD image for the selected `lmax` (e.g., `lmax8`)            |
 | `fa`        | FA image to register (moving image)                          |
-| `fa_fixed`  | Template FA image (fixed image)                              |
+| `fa_fixed`  | Reference FA image (fixed image)                              |
 | `settings`  | Registration complexity level (1–4, see table below)         |
 
 ---
