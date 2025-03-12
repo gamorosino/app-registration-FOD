@@ -47,12 +47,26 @@ All parameters are provided via a `config.json` file.
 
 ## Registration Settings
 
-| Value | Description             | Parameters                                          |
-|-------|-------------------------|-----------------------------------------------------|
-| 1     | One-level registration  | Affine: `10000x0x0`, Syn: `100x0x0,0,5`                      |
-| 2     | Two-level registration  | Affine: `10000x10000x0`, Syn: `100x100x0,-0.01,5`           |
-| 3     | Three-level registration| Affine: `10000x111110x11110`, Syn: `100x100x30,-0.01,5`     |
-| 4     | Four-level registration | Affine: `10000x10000x10000`, Syn: `100x80x50x20,-0.01,10`   |
+## Registration Settings
+
+The `settings` parameter controls the depth of the multiresolution (pyramidal) registration strategy used by ANTs. Higher settings correspond to more levels in the registration pyramid, starting from coarse alignment and progressively refining toward finer spatial correspondence.
+
+| Value | Description                    | Pyramid Levels                                  | Iterations               | Syn Parameters                 | Shrink Factors (Resolution Downsampling) |
+|-------|--------------------------------|--------------------------------------------------|---------------------------|-------------------------------|-------------------------------------------|
+| 1     | Coarse, single-level registration | 1-level (coarse only)                          | `10000x0x0`              | `100x0x0`                 | `4x2x1`                                   |
+| 2     | Coarse-to-medium registration     | 2-level pyramid                                | `10000x10000x0`          | `100x100x0`           | `4x2x1`                                   |
+| 3     | Coarse-to-fine registration       | 3-level pyramid                                | `10000x111110x11110`     | `100x100x30`          | `4x2x1`                                   |
+| 4     | Full multiresolution registration | 4-level pyramid (coarse → fine)                | `10000x10000x10000`      | `100x80x50x20`       | `8x4x2x1`                                 |
+
+
+### Notes:
+- **Iterations** specify the number of optimization steps per level.
+- **Syn Parameters** define the parameters for the Symmetric Normalization (SyN) transformation model.
+- **Shrink Factors** determine the level of image resolution downsampling at each pyramid level (from coarse to fine). For example, `8x4x2x1` means:
+  - Level 1: image downsampled by 8
+  - Level 2: downsampled by 4
+  - Level 3: downsampled by 2
+  - Level 4: full resolution
 
 ---
 
