@@ -40,7 +40,7 @@ fi
 # -------------------------------------------------------------
 # Forward transformation
 # -------------------------------------------------------------
-if [ $inverse -eq 0 ]; then
+if [ $inverse -eq 1 ]; then
 	# Apply pre-affine transform if provided
 	[ -z ${affine1} ] || { pre_affine=" [-t ${affine1},0]  " ; }
 	# Apply main affine transform if provided
@@ -59,7 +59,7 @@ if [ $inverse -eq 0 ]; then
 # -------------------------------------------------------------
 # Inverse transformation: first method
 # -------------------------------------------------------------
-elif [ $inverse -eq 1 ]; then
+elif [ $inverse -eq 0 ]; then
 	# Pre-affine (note: reversed transform direction)
 	[ -z ${affine1} ] || { pre_affine=" -t [${affine1},0]   " ; }
 	# Main affine with inversion
