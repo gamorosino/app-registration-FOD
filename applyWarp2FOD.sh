@@ -40,25 +40,6 @@ fi
 # -------------------------------------------------------------
 # Forward transformation
 # -------------------------------------------------------------
-if [ $inverse -eq 1 ]; then
-	# Apply pre-affine transform if provided
-	[ -z ${affine1} ] || { pre_affine=" [-t ${affine1},0]  " ; }
-	# Apply main affine transform if provided
-	[ "${affine2}" == "None" ] || { apply_affine="-t [${affine2},1] "; }
-
-	# Apply transforms separately on x, y, z warp components
-	for i in {0..2}; do
-	    antsApplyTransforms -d 3 -e 0 -i ${temp_dir}/identity_warp${i}.nii \
-					  -o ${temp_dir}/mrtrix_warp${i}.nii \
-					  -r ${fixed} \
-					  ${pre_affine} \
-					  ${apply_affine} \
-					  ${appl_warp}   # optional: --default-value 2147483647
-	done
-
-# -------------------------------------------------------------
-# Inverse transformation: first method
-# -------------------------------------------------------------
 elif [ $inverse -eq 0 ]; then
 	# Pre-affine (note: reversed transform direction)
 	[ -z ${affine1} ] || { pre_affine=" -t [${affine1},0]   " ; }
@@ -69,10 +50,30 @@ elif [ $inverse -eq 0 ]; then
 	for i in {0..2}; do
 		antsApplyTransforms -d 3 -e 0 -i ${temp_dir}identity_warp${i}.nii \
 					      -o ${temp_dir}/mrtrix_warp${i}.nii \
-					      -r ${moving_space} \
+					      -r ${fixed} \
 					      ${appl_warp} \
 					      ${apply_affine} \
 					      ${pre_affine} #--default-value 2147483647
+	done
+
+# -------------------------------------------------------------
+# Inverse transformation: first method
+# -------------------------------------------------------------
+
+if [ $inverse -eq 1 ]; then
+	# Apply pre-affine transform if provided
+	[ -z ${affine1} ] || { pre_affine=" [-t ${affine1},0]  " ; }
+	# Apply main affine transform if provided
+	[ "${affine2}" == "None" ] || { apply_affine="-t [${affine2},1] "; }
+
+	# Apply transforms separately on x, y, z warp components
+	for i in {0..2}; do
+	    antsApplyTransforms -d 3 -e 0 -i ${temp_dir}/identity_warp${i}.nii \
+					  -o ${temp_dir}/mrtrix_warp${i}.nii \
+					  -r ${moving_space} \
+					  ${pre_affine} \
+					  ${apply_affine} \
+					  ${appl_warp}   # optional: --default-value 2147483647
 	done
 
 # -------------------------------------------------------------
