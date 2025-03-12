@@ -101,7 +101,7 @@ fi
 warpcorrect ${temp_dir}/mrtrix_warp[].nii ${temp_dir}/mrtrix_warp_corrected.mif -force # -marker 2147483647
 
 # Apply the final transformation warp to the moving image
-mrtransform ${moving} ${output_mif} -warp ${temp_dir}/mrtrix_warp_corrected.mif -force ;
+mrtransform ${moving} ${output_mif} -warp ${temp_dir}/mrtrix_warp_corrected.mif -reorient_fod yes -force ;
 
 # Clean up temporary directory
 [ -d ${temp_dir} ] && { rm -rf ${temp_dir}; }
