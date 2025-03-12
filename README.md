@@ -44,9 +44,6 @@ All parameters are provided via a `config.json` file.
 | `settings`  | Registration complexity level (1–4, see table below)         |
 
 ---
-
-## Registration Settings
-
 ## Registration Settings
 
 The `settings` parameter controls the depth of the multiresolution (pyramidal) registration strategy used by ANTs. Higher settings correspond to more levels in the registration pyramid, starting from coarse alignment and progressively refining toward finer spatial correspondence.
