@@ -51,7 +51,7 @@ All parameters are provided via a `config.json` file.
 
 The `settings` parameter controls the depth of the multiresolution (pyramidal) registration strategy used by ANTs. Higher settings correspond to more levels in the registration pyramid, starting from coarse alignment and progressively refining toward finer spatial correspondence.
 
-| Value | Description                    | Pyramid Levels                                  | Iterations               | Syn Parameters                 | Shrink Factors (Resolution Downsampling) |
+| Value | Description                    | Pyramid Levels                                  |  Iterations (Linear)              | Iterations (SyN)                | Shrink Factors (Resolution Downsampling) |
 |-------|--------------------------------|--------------------------------------------------|---------------------------|-------------------------------|-------------------------------------------|
 | 1     | Coarse, single-level registration | 1-level (coarse only)                          | `10000x0x0`              | `100x0x0`                 | `4x2x1`                                   |
 | 2     | Coarse-to-medium registration     | 2-level pyramid                                | `10000x10000x0`          | `100x100x0`           | `4x2x1`                                   |
