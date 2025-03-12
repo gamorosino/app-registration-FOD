@@ -96,7 +96,7 @@ mkdir -p ${transformations}
 
 cp $WarpField ${transformations}'/warp.nii.gz'
 cp $InverseWarpField ${transformations}'/inverse-warp.nii.gz'
-ConvertTransformFile 3 $AffineMat  ${transformations}'/affine.txt'
+singularity exec -e docker://brainlife/ants:2.2.0-1bc ConvertTransformFile 3 $AffineMat  ${transformations}'/affine.txt'
  
 ### === Apply the transformation to FOD using warpinit+antsApplyTransforms+warpcorrect+mrtransform ===
 
