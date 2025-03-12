@@ -4,7 +4,7 @@
 #PBS -V
 
 
-#set -e
+set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/"
 applyWarp2FOD=${SCRIPT_DIR}./applyWarp2FOD.sh
@@ -83,11 +83,11 @@ singularity exec -e docker://brainlife/ants:2.2.0-1bc antsRegistration -d 3 \
   
 	singularity exec -e docker://brainlife/ants:2.2.0-1bc \
     antsApplyTransforms -d 3 \
-                        -i ${fa_moving} 
+                        -i ${fa_moving} \
                         -r ${fa_fixed} \
                         -t  ${WarpField} \
                         -t  ${AffineMat} \
-								        -o ${fa_warped}
+			-o ${fa_warped}
                 
 transformations=${SCRIPT_DIR}'/transformations/'
 mkdir -p ${transformations}
