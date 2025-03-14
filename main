@@ -1,6 +1,6 @@
 #!/bin/bash
 #PBS -l nodes=1:ppn=1,vmem=8g,walltime=0:10:00
-#PBS -N app-apply-transform
+#PBS -N app-align-FOD
 #PBS -V
 
 
