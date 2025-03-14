@@ -39,7 +39,7 @@ case $transf_type in
     nonlin=0
 
     ;;
-  "rigid")
+  "affine")
     echo "Performing rigid registration"
 
     transl=1
@@ -47,7 +47,7 @@ case $transf_type in
     affine=1
     nonlin=0
     ;;
-  "rigid")
+  "nonlinear")
     echo "Performing rigid registration"
     
     transl=1
