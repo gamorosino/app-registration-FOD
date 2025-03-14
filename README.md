@@ -101,7 +101,7 @@ Edit the `config.json` file to point to your FA, template FA, FOD, and desired s
 ### 3. Run the pipeline
 
 ```bash
-./apply_transform_main_final.sh
+./main
 ```
 
 This will:
