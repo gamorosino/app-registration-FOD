@@ -120,7 +120,7 @@ m=${fa_moving}
 stage0="-m mattes[  $f, $m , 1 , 32, regular, $percentage ] -t translation[ 0.1 ] -c [$its,$thresold,20] -u 1 -s $shrink_lin -f $shrink0 -l 1"
 tage1="-m mattes[  $f, $m , 1 , 32, regular, $percentage ] -t rigid[ 0.1 ]       -c [$its,$thresold,20] -u 1 -s $shrink_lin -f $shrink_lin -l 1"
 stage2="-m mattes[  $f, $m , 1 , 32, regular, $percentage ] -t affine[ 0.1 ]      -c [$its,$thresold,20] -u 1 -s $shrink_lin -f $shrink_lin -l 1"
-stage3="-m mattes[  $f, $m , 0.5 , 32 ] -m cc[  $f, $m , 0.5 , 4 ]   -c [ $syn ]  -t $diffeo -s $sigma -f $shrink -l 1 -u 1 -z 1 -u 1"
+stage3="-m mattes[  $f, $m, 0.5 , 32 ] -m cc[  $f, $m, 0.5 , 4 ]   -c [ $syn ]  -t $diffeo -s $sigma -f $shrink -l 1 -u 1 -z 1 -u 1"
 
 [ ${transl} -eq 0 ]  && { stage0='';} || { diffeopost="trasl"; }
 [ ${rigid}  -eq 0 ]  && { stage1='';} || { diffeopost="rigid"; }
@@ -163,7 +163,7 @@ singularity exec -e docker://brainlife/ants:2.2.0-1bc \
     -o [${ANTsprefix},${ANTsdiff},${ANTsinv}] \
     --verbose
 
-### === Apply trasnformation to moving image using ANTs ===
+### === Apply transformation to moving image using ANTs ===
   WarpField=${ANTsprefix}"1Warp.nii.gz"
   InverseWarpField=${ANTsprefix}"1InverseWarp.nii.gz"
   AffineMat=${ANTsprefix}"0GenericAffine.mat"
@@ -176,14 +176,17 @@ singularity exec -e docker://brainlife/ants:2.2.0-1bc \
                         -t  ${WarpField} \
                         -t  ${AffineMat} \
 			-o ${fa_warped}
+
+### === format output in brainlife datatype style ===
                 
 transformations=${SCRIPT_DIR}'/transformations/'
 mkdir -p ${transformations}
-
-### === format output in brainlife datatype style ===
-
-cp $WarpField ${transformations}'/warp.nii.gz'
-cp $InverseWarpField ${transformations}'/inverse-warp.nii.gz'
+if [ ${nonlin} -eq 0 ]; then 
+	WarpField='None'
+else
+	cp $WarpField ${transformations}'/warp.nii.gz'
+	cp $InverseWarpField ${transformations}'/inverse-warp.nii.gz'
+fi
 singularity exec -e docker://brainlife/ants:2.2.0-1bc ConvertTransformFile 3 $AffineMat  ${transformations}'/affine.txt'
  
 ### === Apply the transformation to FOD using warpinit+antsApplyTransforms+warpcorrect+mrtransform ===
