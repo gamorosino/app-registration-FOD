@@ -56,7 +56,7 @@ case $transf_type in
     nonlin=1
     ;;
   *)
-    echo "Invalid trasnformation type"
+    echo "Invalid transformation type"
     exit 1
     ;;
 esac
@@ -69,35 +69,42 @@ diffeo="SyN[0.25]"
 case $settings in
   "1")
     echo "Using one-level registration"
+    its=10000x0x0
     percentage=0.1
-    its="10000x0x0"
-    syn="100x0x0,0,5"
-    sigma="1x0.5x0vox"
-    shrink="4x2x1"
+    syn="100x0x0,0,5" 
+    sigma=1x0.5x0vox
+    shrink=4x2x1
+    sigma_lin=4x2x1vox
+    shrink0=6x4x2
+    shrink_lin=3x2x1
     ;;
   "2")
-    echo "Using two-level registration"
+    its=10000x10000x0
     percentage=0.3
-    its="10000x10000x0"
     syn="100x100x0,-0.01,5"
-    sigma="1x0.5x0vox"
-    shrink="4x2x1"
+    sigma=1x0.5x0vox
+    shrink=4x2x1
+    sigma_lin=4x2x1vox
+    shrink0=6x4x2
+    shrink_lin=3x2x1
     ;;
   "3")
-    echo "Using three-level registration"
+    its=10000x111110x11110
     percentage=0.3
-    its="10000x111110x11110"
     syn="100x100x30,-0.01,5"
-    sigma="1x0.5x0vox"
-    shrink="4x2x1"
+    sigma=1x0.5x0vox
+    shrink=4x2x1
+    sigma_lin=4x2x1vox
+    shrink0=6x4x2
+    shrink_lin=3x2x1
     ;;
   "4")
     echo "Using four-level registration"
+    its=10000x10000x10000
     percentage=0.3
-    its="10000x10000x10000"
     syn="100x80x50x20,${thresold},10"
-    sigma="2x1x0.5x0vox"
-    shrink="8x4x2x1"
+    sigma=2x1x0.5x0vox
+    shrink=8x4x2x1
     sigma_lin=4x2x1vox
     shrink0=6x4x2
     shrink_lin=3x2x1
