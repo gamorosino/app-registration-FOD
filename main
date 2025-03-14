@@ -129,7 +129,7 @@ echo "Running ANTs registration..."
 filenamem=$(basename "${fa_moving}")
 name_noext="${filenamem%.nii.gz}"     # remove .nii.gz if present
 name_noext="${name_noext%.nii}"      # remove .nii if present
-ANTsprefix=${ANTs_outputs}/${name_noext}_
+ANTsprefix=${ANTs_outputs}/${name_noext}_${diffeopost}
 ANTsdiff=${ANTsprefix}"diff.nii.gz"
 ANTsinv=${ANTsprefix}"inv.nii.gz"
 
