@@ -124,7 +124,7 @@ This app is structured for deployment on [Brainlife.io](https://brainlife.io/).
 
 ### Web UI
 
-1. Locate the `app-apply-ants-transform` app on Brainlife.
+1. Locate the `app-align-FOD` app on Brainlife.
 2. Execute the pipeline via the graphical interface.
 
 ### CLI
