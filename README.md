@@ -1,4 +1,4 @@
-# app-align-FOD
+# FOD Registration (app-registration-FOD)
 
 This repository provides a reproducible pipeline to apply spatial transformations to diffusion MRI data using [ANTs (Advanced Normalization Tools)](http://stnava.github.io/ANTs/) and [MRtrix3](https://www.mrtrix.org/), both executed in Singularity containers for reproducibility and platform independence.
 
@@ -90,8 +90,8 @@ affine.txt
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/gamorosino/app-align-FOD.git
-cd app-align-FOD
+git clone https://github.com/gamorosino/app-registration-FOD.git
+cd app-registration-FOD
 ```
 
 ### 2. Prepare your configuration
@@ -124,7 +124,7 @@ This app is structured for deployment on [Brainlife.io](https://brainlife.io/).
 
 ### Web UI
 
-1. Locate the `app-align-FOD` app on Brainlife.
+1. Locate the `app-registration-FOD` app on Brainlife.
 2. Execute the pipeline via the graphical interface.
 
 ### CLI
