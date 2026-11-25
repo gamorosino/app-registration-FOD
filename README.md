@@ -1,5 +1,47 @@
 # FOD Registration (app-registration-FOD)
 
+<!-- brainlife-app:begin (generated from the App manifest; edit the manifest, not this block) -->
+
+> **Registers a subject's FA map to a fixed FA image (for example a template) with ANTs (translation, rigid, affine or SyN) and applies the transform to the CSD fibre orientation distributions with MRtrix3 FOD-aware reorientation.**
+
+Runs antsRegistration between the moving and fixed FA maps with a configurable transformation type and pyramid depth, then warps the FOD image of the selected lmax with the MRtrix3 chain warpinit, antsApplyTransforms, warpcorrect and mrtransform so the FODs are reoriented correctly. Use it to bring CSD FODs of a subject into another subject's or a template space, for example for population FOD analyses or template-space tractography. Only the FOD of the chosen lmax is transformed.
+
+| | |
+|---|---|
+| 📥 **Inputs** | `neuro/csd` · `neuro/tensor` ×2 |
+| 📤 **Outputs** | `neuro/csd` · `neuro/transform/nifti` |
+| 🐳 **Container** | `brainlife/ants:2.2.0-1bc` |
+| ⚙️ **Resources** | 1 CPUs · 2 h walltime |
+| 🔗 **Run it** | [doi.org/10.25663/brainlife.app.849](https://doi.org/10.25663/brainlife.app.849) |
+
+#### 📥 Inputs
+
+| Input | Datatype | Required | Description |
+|---|---|---|---|
+| `moving-csd` | `neuro/csd` | yes | Moving FODs data. Must contain the FOD for the selected lmax. |
+| `moving-tensor` | `neuro/tensor` | yes | Moving DTI Scalars Maps |
+| `fixed-tensor` | `neuro/tensor` | yes | Fixed DTI Scalars Maps |
+
+#### 📤 Outputs
+
+| Output | Datatype | Description |
+|---|---|---|
+| `transformed` | `neuro/csd` | FOD image of the selected lmax resampled and reoriented into the fixed FA space. |
+| `transformations` | `neuro/transform/nifti` | ANTs affine (affine.txt) and, for nonlinear registration, warp.nii.gz and inverse-warp.nii.gz. |
+
+<details>
+<summary><b>⚙️ Parameters</b> (3)</summary>
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lmax` | number | `4` | Select the appropriate value of lmax to be used. |
+| `settings` | number | `4` | The `settings` parameter controls the depth of the multiresolution (pyramidal) registration strategy used by ANTs. Higher settings correspond to more levels in the registration pyramid, starting from coarse alignment and progressively refining toward finer spatial correspondence. |
+| `transformation` | enum | `rigid` | Choose the type of registration from the following: 1) translation 2) rigid 3) affine 4) nonlinear (diffeomorphic SyN) Options: `translation`, `rigid`, `affine`, `nonlinear`. |
+
+</details>
+
+<!-- brainlife-app:end -->
+
 This repository provides a reproducible pipeline to apply spatial transformations to diffusion MRI data using [ANTs (Advanced Normalization Tools)](http://stnava.github.io/ANTs/) and [MRtrix3](https://www.mrtrix.org/), both executed in Singularity containers for reproducibility and platform independence.
 
 The workflow performs nonlinear registration between FA images using ANTs, and applies the resulting warp and affine transformations to FOD images in a way compatible with MRtrix3.
